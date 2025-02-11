@@ -1,0 +1,10 @@
+#saveEventButton{
+    -fx-background-color: green;
+    -fx-font: sans-serif;
+    -fx-text-fill: white;
+
+}
+#h1{
+    -fx-font: sans-serif;
+    -fx-text-fill: #00bbff;
+}
