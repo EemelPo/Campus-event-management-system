@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.gluonhq.charm.glisten.control.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="786.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sep_projecta.EventHomeController">
+    <children>
+        <HBox alignment="CENTER" prefHeight="34.0" prefWidth="600.0" spacing="10.0">
+            <children>
+                <Button mnemonicParsing="false" onMousePressed="#homePage" text="Home" HBox.hgrow="NEVER">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" onMousePressed="#browsePage" text="Browse">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" onMousePressed="#settingsPage" text="Settings">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </HBox.margin>
+                </Button>
+                <Button mnemonicParsing="false" text="Logout" HBox.hgrow="NEVER">
+                    <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                    </HBox.margin>
+                </Button>
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+            <children>
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Hello" />
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="USER" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="30.0" prefWidth="600.0" spacing="5.0">
+            <children>
+
+                <!-- My Events Text -->
+                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="My Events :" />
+                <Text fx:id="myEventsCountLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="3" />
+            </children>
+        </HBox>
+        <TabPane prefHeight="477.0" prefWidth="1142.0" tabClosingPolicy="UNAVAILABLE">
+            <tabs>
+                <Tab text="My Events">
+                    <content>
+                        <CardPane prefHeight="685.0" prefWidth="1531.0">
+                            <VBox style="-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                <children>
+                                    <Text text="Event 1" />
+                                    <Text text="Type: Seminar" />
+                                    <Text text="Location: Myllypuro Campus" />
+                                    <Text text="Date: 2025-02-04" />
+                                    <Text text="Time: 10:00-12:00" />
+                                </children>
+                            </VBox>
+                            <!-- Example Event Cards -->
+                            <VBox style="-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                <Text text="Event 1" />
+                                <Text text="Type: Seminar" />
+                                <Text text="Location: Myllypuro Campus" />
+                                <Text text="Date: 2025-02-04" />
+                                <Text text="Time: 10:00-12:00" />
+                            </VBox>
+                            <VBox prefHeight="22.0" prefWidth="1112.0" style="-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                <children>
+                                    <Text text="Event 1" />
+                                    <Text text="Type: Seminar" />
+                                    <Text text="Location: Myllypuro Campus" />
+                                    <Text text="Date: 2025-02-04" />
+                                    <Text text="Time: 10:00-12:00" />
+                                </children>
+                            </VBox>
+                        </CardPane>
+                    </content>
+                </Tab>
+                <Tab text="Created Events">
+                    <content>
+                        <CardPane fx:id="CreatedEventsCardPane">
+                            <items>
+                                <VBox fx:id="Event1" style="-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                    <children>
+                                        <Text text="Event 1" />
+                                        <Text text="Type: Seminar" />
+                                        <Text text="Location: Myllypuro Campus" />
+                                        <Text text="Date: 2025-02-04" />
+                                        <Text text="Time: 10:00-12:00" />
+                                        <Button fx:id="DeleteEventButton" mnemonicParsing="false" onAction="#deleteEvent" onMousePressed="#deleteEvent" text="Delete" />
+                                    </children>
+                                </VBox>
+                                <VBox style="-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                    <children>
+                                        <Text text="Event 2" />
+                                        <Text text="Type: Seminar" />
+                                        <Text text="Location: Myllypuro Campus" />
+                                        <Text text="Date: 2025-02-04" />
+                                        <Text text="Time: 10:00-12:00" />
+                                        <Button mnemonicParsing="false" onMousePressed="#deleteEvent" text="Delete" />
+                                    </children>
+                                </VBox>
+                                <VBox style="-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-radius: 5; -fx-background-radius: 5;">
+                                    <children>
+                                        <Text text="Event 3" />
+                                        <Text text="Type: Seminar" />
+                                        <Text text="Location: Myllypuro Campus" />
+                                        <Text text="Date: 2025-02-04" />
+                                        <Text text="Time: 10:00-12:00" />
+                                        <Button mnemonicParsing="false" onMousePressed="#deleteEvent" text="Delete" />
+                                    </children>
+                                </VBox>
+                            </items>
+                        </CardPane>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</VBox>
