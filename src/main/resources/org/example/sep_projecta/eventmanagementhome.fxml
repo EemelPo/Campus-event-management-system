@@ -15,7 +15,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" onMousePressed="#browsePage" text="Browse">
+                <Button mnemonicParsing="false" onAction="#browsePage" onMousePressed="#browsePage" text="Browse">
                     <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin>
