@@ -1,22 +1,21 @@
 package org.example.sep_projecta;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseConnector {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/yourdatabase";
-    private static final String USER = "yourusername";
-    private static final String PASSWORD = "yourpassword";
+    private static final String URL = "jdbc:mysql://localhost:3306/eventmanagement";
+    private static final String USER = "testuser";
+    private static final String PASSWORD = "Test1234!";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
     public static void saveEvent(EventModel event) throws SQLException {
-        String query = "INSERT INTO events (name, startTime, endTime, category, location, description, date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Event (name, startTime, endTime, category, location, description, date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -31,6 +30,45 @@ public class DatabaseConnector {
 
             statement.executeUpdate();
         }
+    }
+
+    public static List<EventModel> getAllEvents() throws SQLException {
+        String query = "SELECT * FROM Event";
+        List<EventModel> events = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                EventModel event = new EventModel(
+                        resultSet.getString("name"),
+                        resultSet.getTime("startTime").toLocalTime(),
+                        resultSet.getTime("endTime").toLocalTime(),
+                        resultSet.getString("category"),
+                        resultSet.getString("location"),
+                        resultSet.getString("description"),
+                        resultSet.getDate("date").toLocalDate()
+                );
+                events.add(event);
+            }
+        }
+        return events;
+    }
+
+    public static List<String> getDistinctValues(String column) throws SQLException {
+        String query = "SELECT DISTINCT " + column + " FROM Event";
+        List<String> values = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                values.add(resultSet.getString(column));
+            }
+        }
+        return values;
     }
 }
 
