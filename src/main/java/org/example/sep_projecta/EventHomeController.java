@@ -36,7 +36,6 @@ public class EventHomeController {
 
     @FXML
     private void settingsPage() {
-        // Handle settings page button press
     }
 
     @FXML

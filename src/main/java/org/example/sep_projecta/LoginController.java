@@ -14,12 +14,14 @@ import java.io.IOException;
 public class LoginController {
 
     private Stage stage;
-    @FXML private TextField usernameField;
-    @FXML private TextField passwordField;
+    @FXML
+    TextField usernameField;
+    @FXML
+    TextField passwordField;
     @FXML private Button loginButton;
 
     @FXML
-    private void handleLogin(ActionEvent event) throws IOException {
+    void handleLogin(ActionEvent event) throws IOException {
         String username = usernameField.getText();
         String password = passwordField.getText();
 

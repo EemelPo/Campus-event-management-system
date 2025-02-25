@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
@@ -37,7 +36,7 @@ public class EventController {
     @FXML
     private DatePicker datePicker;
 
-    private List<Event> eventList;
+    private List<EventModel> eventList;
     private ObservableList<MenuItem> categoryMenuItems;
     private ObservableList<MenuItem> locationMenuItems;
     private Stage stage;
@@ -45,9 +44,9 @@ public class EventController {
     public EventController() {
         eventList = new ArrayList<>();
         // Add some sample events
-        eventList.add(new Event("AI future", "Category 1", "Location 1", LocalDate.now(), LocalTime.of(10, 0), LocalTime.of(12, 0)));
-        eventList.add(new Event("OOP is cool", "Category 2", "Location 2", LocalDate.now().plusDays(1), LocalTime.of(14, 0), LocalTime.of(16, 0)));
-        eventList.add(new Event("Matrix math optimizations", "Category 1", "Location 2", LocalDate.now().plusDays(30), LocalTime.of(16, 0), LocalTime.of(18, 0)));
+        eventList.add(new EventModel("AI future", LocalTime.of(10, 0), LocalTime.of(12, 0), "Category 1", "Location 1", "Exploring the future of artificial intelligence", LocalDate.now()));
+        eventList.add(new EventModel("OOP is cool", LocalTime.of(14, 0), LocalTime.of(16, 0), "Category 2", "Location 2", "Understanding the principles of Object-Oriented Programming", LocalDate.now().plusDays(1)));
+        eventList.add(new EventModel("Matrix math optimizations", LocalTime.of(16, 0), LocalTime.of(18, 0), "Category 1", "Location 2", "Optimizing matrix operations for better performance", LocalDate.now().plusDays(30)));
 
         // Initialize the ObservableLists for menu items
         categoryMenuItems = FXCollections.observableArrayList();
@@ -78,7 +77,7 @@ public class EventController {
         locationMenuItems.add(new CheckMenuItem("Location 2"));
 
         // Add event cards to the FlowPane
-        for (Event event : eventList) {
+        for (EventModel event : eventList) {
             eventFlowPane.getChildren().add(createEventCard(event));
         }
 
@@ -112,7 +111,7 @@ public class EventController {
 
     }
 
-    private StackPane createEventCard(Event event) {
+    private StackPane createEventCard(EventModel event) {
         StackPane stackPane = new StackPane();
         stackPane.setStyle("-fx-background-color: lightgray; -fx-padding: 10; -fx-border-radius: 10; -fx-background-radius: 10;");
         stackPane.setPrefSize(150, 100);
@@ -120,17 +119,17 @@ public class EventController {
         VBox vBox = new VBox(5);
         vBox.setStyle("-fx-alignment: center-left;");
 
-        Text nameText = new Text(event.getName());
-        Text categoryText = new Text("Category: " + event.getCategory());
-        Text locationText = new Text("Location: " + event.getLocation());
-        Text dateText = new Text("Date: " + event.getDate().toString());
+        Text nameText = new Text(event.getEventName());
+        Text categoryText = new Text("Category: " + event.getEventCategory());
+        Text locationText = new Text("Location: " + event.getEventLocation());
+        Text dateText = new Text("Date: " + event.getEventDate().toString());
 
         HBox timeBox = new HBox(5);
         timeBox.setStyle("-fx-alignment: center;");
 
         StackPane timePane = new StackPane();
         timePane.setStyle("-fx-background-color: darkgray; -fx-padding: 5; -fx-border-radius: 10; -fx-background-radius: 10;");
-        Text timeText = new Text(event.getStartTime().toString() + " - " + event.getEndTime().toString());
+        Text timeText = new Text(event.getEventStartTime().toString() + " - " + event.getEventEndTime().toString());
         timeText.setStyle("-fx-fill: white;");
 
         timePane.getChildren().add(timeText);
@@ -142,7 +141,7 @@ public class EventController {
         return stackPane;
     }
 
-    private List<Event> filterEvents(String searchText, LocalDate selectedDate) {
+    private List<EventModel> filterEvents(String searchText, LocalDate selectedDate) {
         List<String> selectedCategories = categoryMenu.getItems().stream()
                 .filter(item -> item instanceof CheckMenuItem && ((CheckMenuItem) item).isSelected())
                 .map(MenuItem::getText)
@@ -154,22 +153,23 @@ public class EventController {
                 .collect(Collectors.toList());
 
         return eventList.stream()
-                .filter(event -> (searchText.isEmpty() || event.getName().toLowerCase().contains(searchText) ||
-                        event.getCategory().toLowerCase().contains(searchText) ||
-                        event.getLocation().toLowerCase().contains(searchText)) &&
-                        (selectedDate == null || event.getDate().equals(selectedDate)) &&
-                        (selectedCategories.isEmpty() || selectedCategories.contains(event.getCategory())) &&
-                        (selectedLocations.isEmpty() || selectedLocations.contains(event.getLocation())))
+                .filter(EventModel -> (searchText.isEmpty() || EventModel.getEventName().toLowerCase().contains(searchText) ||
+                        EventModel.getEventCategory().toLowerCase().contains(searchText) ||
+                        EventModel.getEventLocation().toLowerCase().contains(searchText)) &&
+                        (selectedDate == null || EventModel.getEventDate().equals(selectedDate)) &&
+                        (selectedCategories.isEmpty() || selectedCategories.contains(EventModel.getEventCategory())) &&
+                        (selectedLocations.isEmpty() || selectedLocations.contains(EventModel.getEventLocation())))
                 .collect(Collectors.toList());
+
     }
 
     @FXML
     public void searchEvents() {
         String searchText = searchField.getText().toLowerCase();
         LocalDate selectedDate = datePicker.getValue();
-        List<Event> filteredEvents = filterEvents(searchText, selectedDate);
+        List<EventModel> filteredEvents = filterEvents(searchText, selectedDate);
         eventFlowPane.getChildren().clear();
-        for (Event event : filteredEvents) {
+        for (EventModel event : filteredEvents) {
             eventFlowPane.getChildren().add(createEventCard(event));
         }
     }
@@ -182,5 +182,17 @@ public class EventController {
         stage.setScene(scene);
         stage.setTitle("Event Management Home");
         stage.show();
+    }
+
+    public List<EventModel> getEventList() {
+        return eventList;
+    }
+
+    public ObservableList<MenuItem> getCategoryMenuItems() {
+        return categoryMenuItems;
+    }
+
+    public ObservableList<MenuItem> getLocationMenuItems() {
+        return locationMenuItems;
     }
 }

@@ -61,32 +61,32 @@
                 <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <DatePicker maxWidth="200.0">
+                <DatePicker fx:id="eventDatePicker" maxWidth="200.0">
                     <GridPane.margin>
                         <Insets left="55.0" />
                     </GridPane.margin>
                 </DatePicker>
-                <TextField maxWidth="200.0" prefWidth="200.0" promptText="Event name:" GridPane.columnIndex="1">
+                <TextField fx:id="eventNameField" maxWidth="200.0" prefWidth="200.0" promptText="Event name:" GridPane.columnIndex="1">
                     <GridPane.margin>
                         <Insets left="55.0" />
                     </GridPane.margin>
                 </TextField>
-                <TextField maxWidth="200.0" promptText="Start time:" GridPane.rowIndex="1">
+                <TextField fx:id="eventStartField" maxWidth="200.0" promptText="Start time:" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets left="55.0" />
                     </GridPane.margin>
                 </TextField>
-                <TextField maxWidth="200.0" promptText="End time:" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <TextField fx:id="eventEndField" maxWidth="200.0" promptText="End time:" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets left="55.0" />
                     </GridPane.margin>
                 </TextField>
-                <TextField maxWidth="200.0" promptText="Category:" GridPane.rowIndex="2">
+                <TextField fx:id="eventCategoryField" maxWidth="200.0" promptText="Category:" GridPane.rowIndex="2">
                     <GridPane.margin>
                         <Insets left="55.0" />
                     </GridPane.margin>
                 </TextField>
-                <TextField maxWidth="200.0" promptText="Location:" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <TextField fx:id="eventLocationField" maxWidth="200.0" promptText="Location:" GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <GridPane.margin>
                         <Insets left="55.0" />
                     </GridPane.margin>
@@ -95,7 +95,7 @@
         </GridPane>
         <HBox prefHeight="132.0" prefWidth="600.0">
             <children>
-                <TextField alignment="CENTER" prefHeight="134.0" prefWidth="600.0" promptText="Event description:" HBox.hgrow="ALWAYS" />
+                <TextField fx:id="eventDescriptionField" alignment="CENTER" prefHeight="134.0" prefWidth="600.0" promptText="Event description:" HBox.hgrow="ALWAYS" />
             </children>
         </HBox>
         <HBox alignment="TOP_CENTER" prefHeight="61.0" prefWidth="580.0">

@@ -1,17 +1,19 @@
 package org.example.sep_projecta;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class EventModel {
     public String eventName;
-    public String eventStartTime;
-    public String eventEndTime;
+    public LocalTime eventStartTime;
+    public LocalTime eventEndTime;
     public String eventLocation;
     public String eventCategory;
     public String eventDescription;
     public LocalDate eventDate;
 
-    public EventModel(String eventName, String eventStartTime, String eventEndTime, String eventCategory, String eventLocation, String eventDescription, LocalDate eventDate){
+
+    public EventModel(String eventName, LocalTime eventStartTime, LocalTime eventEndTime, String eventCategory, String eventLocation, String eventDescription, LocalDate eventDate){
         this.eventName = eventName;
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
@@ -29,20 +31,20 @@ public class EventModel {
         this.eventName = eventName;
     }
 
-    public String getEventStartTime() {
+    public LocalTime getEventStartTime() {
         return eventStartTime;
     }
 
-    public void setEventStartTime(String eventStartTime) {
-        this.eventStartTime = eventStartTime;
+    public void setEventStartTime(LocalTime eventStartTime) {
+        this.eventStartTime = (eventStartTime);
     }
 
-    public String getEventEndTime() {
+    public LocalTime getEventEndTime() {
         return eventEndTime;
     }
 
-    public void setEventEndTime(String eventEndTime) {
-        this.eventEndTime = eventEndTime;
+    public void setEventEndTime(LocalTime eventEndTime) {
+        this.eventEndTime = (eventEndTime);
     }
 
     public String getEventCategory() {

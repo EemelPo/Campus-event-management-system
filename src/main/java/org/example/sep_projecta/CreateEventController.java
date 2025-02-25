@@ -4,44 +4,44 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class CreateEventController {
     @FXML
-    private DatePicker eventDatePicker;
+    DatePicker eventDatePicker;
     @FXML
-    private TextField eventNameField;
+    TextField eventNameField;
     @FXML
-    private TextField eventStartField;
+    TextField eventStartField;
     @FXML
-    private TextField eventEndField;
+    TextField eventEndField;
     @FXML
-    private TextField eventCategoryField;
+    TextField eventCategoryField;
     @FXML
-    private TextField eventLocationField;
+    TextField eventLocationField;
     @FXML
-    private TextField eventDescriptionField;
+    TextField eventDescriptionField;
     @FXML
-    private Button saveEventButton;
+    Button saveEventButton;
 
 
-    private EventModel event;
+    EventModel event;
 
     @FXML
-
-    private void initialize(){
+    void initialize(){
         saveEventButton.setOnAction(event -> saveEvent());
 
     }
 
     private void saveEvent(){
         String eventName = eventNameField.getText();
-        String eventStartTime = eventStartField.getText();
-        String eventEndTime = eventEndField.getText();
+        String startFieldText = (eventStartField.getText());
+        String endFieldText = (eventEndField.getText());
         String eventCategory = eventCategoryField.getText();
         String eventLocation = eventLocationField.getText();
         String eventDescription = eventDescriptionField.getText();
         LocalDate eventDate = eventDatePicker.getValue();
-        if (eventName.isEmpty() || eventStartTime.isEmpty() || eventEndTime.isEmpty() ||
+        if (eventName.isEmpty() || startFieldText.isEmpty() || endFieldText.isEmpty() ||
                 eventCategory.isEmpty() || eventLocation.isEmpty() || eventDescription.isEmpty() ||
                 eventDate == null) {
             Alert errorMessageAlert = new Alert(Alert.AlertType.ERROR);
@@ -51,6 +51,9 @@ public class CreateEventController {
 
             return;
         }
+
+        LocalTime eventStartTime = LocalTime.parse(startFieldText);
+        LocalTime eventEndTime = LocalTime.parse(endFieldText);
 
 
         event = new EventModel(eventName, eventStartTime, eventEndTime, eventCategory, eventLocation, eventDescription, eventDate);
