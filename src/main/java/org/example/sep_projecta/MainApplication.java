@@ -9,23 +9,44 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 public class MainApplication extends Application {
+    private static Stage primaryStage;
+
     @Override
-    public void start(Stage stage) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("eventmanagementlogin.fxml"));
-            FXMLLoader fxmlLoader2 = new FXMLLoader(MainApplication.class.getResource("eventmanagementhome.fxml"));
-            FXMLLoader fxmlLoader3 = new FXMLLoader(MainApplication.class.getResource("CreateEvent.fxml"));
-            FXMLLoader fxmlLoader4 = new FXMLLoader(MainApplication.class.getResource("eventmanagementbrowsetest.fxml"));
-            Scene scene1 = new Scene(fxmlLoader.load());
-            //Scene scene2 = new Scene(fxmlLoader2.load());
-            //Scene scene3 = new Scene(fxmlLoader3.load());
-            //Scene scene4 = new Scene(fxmlLoader4.load());
-            stage.setScene(scene1);
-            stage.setTitle("Event Management Home");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void start(Stage primaryStage) throws IOException {
+        MainApplication.primaryStage = primaryStage;
+        showLoginScreen();
+    }
+
+    public static void showLoginScreen() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("eventmanagementlogin.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        primaryStage.setTitle("Login");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void showRegistrationScreen() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("eventmanagementregistration.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        primaryStage.setTitle("Register");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void showHomePage() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("eventmanagementhome.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        primaryStage.setTitle("home");
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void showCreateEventPage() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("CreateEvent.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+        primaryStage.setTitle("Create Event");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     public static void main(String[] args) throws SQLException {

@@ -25,7 +25,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" text="Logout" HBox.hgrow="NEVER">
+                <Button mnemonicParsing="false" onMousePressed="#handleLogout" text="Logout" HBox.hgrow="NEVER">
                     <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </HBox.margin>
@@ -46,7 +46,7 @@
 
                 <!-- My Events Text -->
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="My Events :" />
-                <Text fx:id="myEventsCountLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="3" />
+                <Text fx:id="myEventsCountLabel" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
             </children>
         </HBox>
         <TabPane prefHeight="477.0" prefWidth="1142.0" tabClosingPolicy="UNAVAILABLE">
@@ -65,5 +65,10 @@
                 </Tab>
             </tabs>
         </TabPane>
+      <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <items>
+          <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleCreateEvent" prefHeight="25.0" prefWidth="770.0" text="Button" />
+        </items>
+      </ToolBar>
     </children>
 </VBox>

@@ -48,17 +48,12 @@ public class EventHomeController {
         Button deleteButton = (Button) event.getSource();
         VBox vbox = (VBox) deleteButton.getParent();
         CreatedEventsCardPane.getItems().remove(vbox);
-
-        String x = myEventsCountLabel.getText();
-        int y = Integer.parseInt(x);
-        int newCount = y - 1;
-        myEventsCountLabel.setText(Integer.toString(newCount));
     }
 
     @FXML
     public void initialize() {
         try {
-            List<EventModel> myEvents = DatabaseConnector.getMyEvents(2);
+            List<EventModel> myEvents = DatabaseConnector.getMyEvents(AuthService.getCurrentUserId());
             for (EventModel event : myEvents) {
                 VBox eventBox = new VBox();
                 eventBox.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-radius: 5; -fx-background-radius: 5;");
@@ -71,13 +66,14 @@ public class EventHomeController {
 
                 eventBox.getChildren().addAll(eventName, eventType, eventLocation, eventDate, eventTime);
                 MyEventsCardPane.getItems().add(eventBox);
+                myEventsCountLabel.setText(Integer.toString(myEvents.size()));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         try {
-            List<EventModel> createdEvents = DatabaseConnector.getCreatedEvents(2);
+            List<EventModel> createdEvents = DatabaseConnector.getCreatedEvents(AuthService.getCurrentUserId());
             for (EventModel event : createdEvents) {
                 VBox eventBox = new VBox();
                 eventBox.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-radius: 5; -fx-background-radius: 5;");
@@ -98,6 +94,24 @@ public class EventHomeController {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void handleLogout(){
+        try {
+            MainApplication.showLoginScreen();
+            AuthService.resetUserId();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleCreateEvent() throws IOException {
+        try {
+            MainApplication.showCreateEventPage();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+        }
 
     @FXML
     private void homePage(){

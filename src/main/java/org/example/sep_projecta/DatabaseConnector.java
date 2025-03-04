@@ -18,7 +18,7 @@ public class DatabaseConnector {
 
 
     public static void HandleSaveEvent(EventModel event) throws SQLException {
-        String query = "INSERT INTO events (name, startTime, endTime, category, location, description, date, maxAtt, AttQuant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO event (name, startTime, endTime, category, location, description, date, maxAttendance, AttQuantity, creatorid) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 
         try (Connection connection = getConnection();
@@ -33,6 +33,7 @@ public class DatabaseConnector {
             statement.setDate(7, java.sql.Date.valueOf(event.getEventDate()));
             statement.setInt(8,event.getEventMaxAtt());
             statement.setInt(9,event.getEventAttQuant());
+            statement.setInt(10,event.getCreatorid());
 
             statement.executeUpdate();
         } catch (SQLException e){
@@ -57,7 +58,10 @@ public class DatabaseConnector {
                         resultSet.getString("category"),
                         resultSet.getString("location"),
                         resultSet.getString("description"),
-                        resultSet.getDate("date").toLocalDate()
+                        resultSet.getDate("date").toLocalDate(),
+                        resultSet.getInt("maxAttendance"),
+                        resultSet.getInt("AttQuantity"),
+                        resultSet.getInt("creatorid")
                 );
                 events.add(event);
             }
@@ -78,6 +82,7 @@ public class DatabaseConnector {
             }
         }
         return values;
+    }
 
     public static List<EventModel> getMyEvents(int userId) throws SQLException {
         String query = "SELECT e.* FROM event e JOIN attendance a ON e.eventid = a.eventid WHERE a.userid = ?";
@@ -90,7 +95,6 @@ public class DatabaseConnector {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                int eventId = resultSet.getInt("eventid");
                 String name = resultSet.getString("name");
                 Time startTime = resultSet.getTime("startTime");
                 Time endTime = resultSet.getTime("endTime");
@@ -98,8 +102,11 @@ public class DatabaseConnector {
                 String location = resultSet.getString("location");
                 String description = resultSet.getString("description");
                 Date date = resultSet.getDate("date");
+                int maxAtt = resultSet.getInt("maxAttendance");
+                int AttQuant = resultSet.getInt("AttQuantity");
+                int creatorid = resultSet.getInt("creatorid");
 
-                EventModel event = new EventModel(eventId, name, startTime.toLocalTime(), endTime.toLocalTime(), category, location, description, date.toLocalDate());
+                EventModel event = new EventModel(name, startTime.toLocalTime(), endTime.toLocalTime(), category, location, description, date.toLocalDate(), maxAtt, AttQuant, creatorid);
                 events.add(event);
             }
         }
@@ -108,7 +115,7 @@ public class DatabaseConnector {
     }
 
     public static List<EventModel> getCreatedEvents(int userId) throws SQLException {
-        String query = "SELECT e.* FROM event e JOIN teachercreates a ON e.eventid = a.eventid WHERE a.userid = ?";
+        String query = "SELECT * FROM event WHERE creatorid = ?";
         List<EventModel> events = new ArrayList<>();
 
         try (Connection connection = getConnection();
@@ -126,14 +133,30 @@ public class DatabaseConnector {
                 String location = resultSet.getString("location");
                 String description = resultSet.getString("description");
                 Date date = resultSet.getDate("date");
+                int maxAtt = resultSet.getInt("maxAttendance");
+                int AttQuant = resultSet.getInt("AttQuantity");
+                int creatorid = resultSet.getInt("creatorid");
 
-                EventModel event = new EventModel(eventId, name, startTime.toLocalTime(), endTime.toLocalTime(), category, location, description, date.toLocalDate());
+                EventModel event = new EventModel(name, startTime.toLocalTime(), endTime.toLocalTime(), category, location, description, date.toLocalDate(), maxAtt, AttQuant, creatorid);
                 events.add(event);
             }
         }
 
         return events;
 
+    }
+
+    public static void handleAttendEvent(int userId, int eventId) throws SQLException {
+        String query = "INSERT INTO attendance (userid, eventid) VALUES (?, ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, userId);
+            statement.setInt(2, eventId);
+
+            statement.executeUpdate();
+        }
     }
 }
 

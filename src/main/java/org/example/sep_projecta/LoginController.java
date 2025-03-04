@@ -1,42 +1,46 @@
 package org.example.sep_projecta;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
-import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class LoginController {
-
-    private Stage stage;
-    @FXML
-    TextField usernameField;
-    @FXML
-    TextField passwordField;
-    @FXML private Button loginButton;
+    @FXML public TextField usernameField;
+    @FXML public TextField passwordField;
+    @FXML public Button loginButton;
+    @FXML public Button registerButton;
 
     @FXML
-    void handleLogin(ActionEvent event) throws IOException {
+    public void handleLogin() {
         String username = usernameField.getText();
         String password = passwordField.getText();
 
         if (AuthService.auth(username, password)) {
+            int userId = AuthService.getCurrentUserId();
             showAlert(Alert.AlertType.INFORMATION, "Login Successful", "Welcome, " + username + "!");
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("eventmanagementhome.fxml"));
-            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-            Scene scene = new Scene(fxmlLoader.load());
-            stage.setScene(scene);
-            stage.setTitle("Event Management Home");
-            stage.show();
+            try{
+                MainApplication.showHomePage();
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
         } else {
             showAlert(Alert.AlertType.ERROR, "Login Failed", "Invalid credentials.");
         }
     }
+
+    @FXML
+    public void handleRegister() {
+        try {
+            MainApplication.showRegistrationScreen();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     private void showAlert(Alert.AlertType alertType, String title, String message) {
         Alert alert = new Alert(alertType);

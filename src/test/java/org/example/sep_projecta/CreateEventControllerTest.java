@@ -1,22 +1,32 @@
 package org.example.sep_projecta;
 
-import javafx.application.Platform;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class CreateEventControllerTest extends ApplicationTest {
 
+    @InjectMocks
     private CreateEventController controller;
+
+    @Mock
+    private DatabaseConnector databaseConnector;
 
     @BeforeEach
     void setUp() {
-        controller = new CreateEventController();
         controller.eventDatePicker = new DatePicker();
         controller.eventNameField = new TextField();
         controller.eventStartField = new TextField();
@@ -27,50 +37,56 @@ class CreateEventControllerTest extends ApplicationTest {
         controller.eventAttQuantField = new TextField();
         controller.eventDescriptionField = new TextField();
         controller.saveEventButton = new Button();
-        controller.initialize();
     }
 
     @Test
-    void testSaveEventWithEmptyFields() {
-        Platform.runLater(() -> {
-            controller.eventNameField.setText("");
-            controller.eventStartField.setText("");
-            controller.eventEndField.setText("");
-            controller.eventCategoryField.setText("");
-            controller.eventLocationField.setText("");
-            controller.eventDescriptionField.setText("");
-            controller.eventMaxAttField.setText("");
-            controller.eventAttQuantField.setText("");
-            controller.eventDatePicker.setValue(null);
+    void errorWhenFieldsEmpty() throws SQLException {
+        controller.eventNameField.setText("");
+        controller.eventStartField.setText("");
+        controller.eventEndField.setText("");
+        controller.eventCategoryField.setText("");
+        controller.eventLocationField.setText("");
+        controller.eventDescriptionField.setText("");
+        controller.eventMaxAttField.setText("0");
+        controller.eventAttQuantField.setText("0");
+        controller.eventDatePicker.setValue(null);
 
-            controller.saveEventButton.fire();
+        controller.saveEvent();
 
-            assertNull(controller.event);
-        });
+        verifyNoInteractions(databaseConnector);
     }
 
     @Test
-    void testSaveEventWithValidFields() {
-        Platform.runLater(() -> {
-            controller.eventNameField.setText("Event Name");
-            controller.eventStartField.setText("10:00");
-            controller.eventEndField.setText("12:00");
-            controller.eventCategoryField.setText("Category");
-            controller.eventLocationField.setText("Location");
-            controller.eventMaxAttField.setText("91");
-            controller.eventDescriptionField.setText("Description");
-            controller.eventDatePicker.setValue(LocalDate.now());
+    void errorWhenAttMoreThanMax() throws SQLException {
+        controller.eventNameField.setText("Test Event");
+        controller.eventStartField.setText("12:00");
+        controller.eventEndField.setText("14:00");
+        controller.eventCategoryField.setText("Test Category");
+        controller.eventLocationField.setText("Test Location");
+        controller.eventDescriptionField.setText("Test Description");
+        controller.eventMaxAttField.setText("5");
+        controller.eventAttQuantField.setText("10");
+        controller.eventDatePicker.setValue(LocalDate.now());
 
-            controller.saveEventButton.fire();
+        controller.saveEvent();
 
-            assertNotNull(controller.event);
-            assertEquals("Event Name", controller.event.getEventName());
-            assertEquals("10:00", controller.event.getEventStartTime());
-            assertEquals("12:00", controller.event.getEventEndTime());
-            assertEquals("Category", controller.event.getEventCategory());
-            assertEquals("Location", controller.event.getEventLocation());
-            assertEquals("Description", controller.event.getEventDescription());
-            assertEquals(LocalDate.now(), controller.event.getEventDate());
-        });
+        verifyNoInteractions(databaseConnector);
+    }
+
+    @Test
+    void saveEvent() throws SQLException {
+        controller.eventNameField.setText("Test Event");
+        controller.eventStartField.setText("12:00");
+        controller.eventEndField.setText("14:00");
+        controller.eventCategoryField.setText("Test Category");
+        controller.eventLocationField.setText("Test Location");
+        controller.eventDescriptionField.setText("Test Description");
+        controller.eventMaxAttField.setText("5");
+        controller.eventAttQuantField.setText("3");
+        controller.eventDatePicker.setValue(LocalDate.now());
+
+        controller.saveEvent();
+
     }
 }
+

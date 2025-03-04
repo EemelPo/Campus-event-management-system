@@ -1,8 +1,10 @@
 package org.example.sep_projecta;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -32,6 +34,7 @@ public class CreateEventController {
 
     EventModel event;
 
+
     @FXML
     void initialize(){
         saveEventButton.setOnAction(event -> {
@@ -43,8 +46,17 @@ public class CreateEventController {
         });
 
     }
-
-    private void saveEvent() throws SQLException {
+    @FXML
+    private void handleLogout(){
+        try {
+            MainApplication.showLoginScreen();
+            AuthService.resetUserId();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+    @FXML
+    void saveEvent() throws SQLException {
         String eventName = eventNameField.getText();
         String startFieldText = (eventStartField.getText());
         String endFieldText = (eventEndField.getText());
@@ -55,13 +67,16 @@ public class CreateEventController {
 
         int eventMax = Integer.parseInt(eventMaxAttField.getText());
         int eventAtt = Integer.parseInt(eventAttQuantField.getText());
+        int creatorid = AuthService.getCurrentUserId();
 
         if (eventName.isEmpty() || startFieldText.isEmpty() || endFieldText.isEmpty() ||
                 eventCategory.isEmpty() || eventLocation.isEmpty() || eventDescription.isEmpty() || eventMax == 0|| eventAtt == 0||
                 eventDate == null) {
-            Alert errorMessageAlert = new Alert(Alert.AlertType.ERROR);
-            errorMessageAlert.setContentText("Please fill all fields!");
-            errorMessageAlert.showAndWait();
+            Platform.runLater(() -> {
+                Alert errorMessageAlert = new Alert(Alert.AlertType.ERROR);
+                errorMessageAlert.setContentText("Please fill all fields!");
+                errorMessageAlert.showAndWait();
+            });
 
 
             return;
@@ -72,7 +87,7 @@ public class CreateEventController {
 
 
 
-        event = new EventModel(eventName, eventStartTime, eventEndTime, eventCategory, eventLocation, eventDescription, eventDate, eventMax, eventAtt);
+        event = new EventModel(eventName, eventStartTime, eventEndTime, eventCategory, eventLocation, eventDescription, eventDate, eventMax, eventAtt, creatorid);
 
         DatabaseConnector.HandleSaveEvent(event);
 

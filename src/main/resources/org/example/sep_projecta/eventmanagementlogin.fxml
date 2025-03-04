@@ -8,8 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="515.0" prefWidth="786.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sep_projecta.LoginController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.sep_projecta.LoginController">
     <center>
         <VBox alignment="BASELINE_CENTER" fillWidth="false" prefHeight="200.0" prefWidth="100.0" spacing="10.0" BorderPane.alignment="CENTER">
             <children>
@@ -17,9 +16,11 @@
                 <TextField fx:id="usernameField" />
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Password" />
                 <TextField fx:id="passwordField" />
-                <Button mnemonicParsing="false" fx:id="loginButton" text="Login" onAction="#handleLogin"  />
+                <Button mnemonicParsing="false" fx:id="loginButton" text="Login" onAction="#handleLogin" defaultButton="true"/>
+                <Button mnemonicParsing="false" fx:id="registerButton" text="Register" onAction="#handleRegister" />
             </children>
-            <BorderPane.margin>            <Insets top="10.0" />
+            <BorderPane.margin>
+                <Insets top="10.0" />
             </BorderPane.margin>
         </VBox>
     </center>

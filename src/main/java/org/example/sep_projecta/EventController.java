@@ -7,11 +7,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 import javafx.beans.binding.Bindings;
 
@@ -121,7 +123,17 @@ public class EventController {
 
     }
 
-    private void populateMenuItems(ObservableList<MenuItem> menuItems, String column) {
+    @FXML
+    private void attendEvent(MouseEvent event) {
+        Button attendButton = (Button) event.getSource();
+        try {
+            DatabaseConnector.handleAttendEvent(AuthService.getCurrentUserId(), Integer.parseInt((attendButton.getId())));
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void populateMenuItems(ObservableList<MenuItem> menuItems, String column) {
         try {
             List<String> values = DatabaseConnector.getDistinctValues(column);
             for (String value : values) {
@@ -145,6 +157,11 @@ public class EventController {
         Text locationText = new Text("Location: " + event.getEventLocation());
         Text dateText = new Text("Date: " + event.getEventDate().toString());
 
+        Text descriptionText = new Text("Description: " + event.getEventDescription());
+        descriptionText.setWrappingWidth(130); // Set wrapping width for description
+
+        TextFlow descriptionTextFlow = new TextFlow(descriptionText); // Use TextFlow for wrapping
+
         HBox timeBox = new HBox(5);
         timeBox.setStyle("-fx-alignment: center;");
 
@@ -156,15 +173,21 @@ public class EventController {
         timePane.getChildren().add(timeText);
         timeBox.getChildren().add(timePane);
 
-        vBox.getChildren().addAll(nameText, categoryText, locationText, dateText, timeBox);
+        Button attendButton = new Button("Attend");
+        attendButton.setOnMouseClicked(this::attendEvent);
+
+        vBox.getChildren().addAll(nameText, categoryText, locationText, dateText, descriptionTextFlow, timeBox);
+        vBox.getChildren().add(attendButton);
+
         stackPane.getChildren().add(vBox);
 
-        System.out.print("Created card for event: " + event.getEventName());
+        System.out.println("Created card for event: " + event.getEventName());
 
         return stackPane;
     }
 
-    private List<EventModel> filterEvents(String searchText, LocalDate selectedDate) {
+
+    public List<EventModel> filterEvents(String searchText, LocalDate selectedDate) {
         List<String> selectedCategories = categoryMenu.getItems().stream()
                 .filter(item -> item instanceof CheckMenuItem && ((CheckMenuItem) item).isSelected())
                 .map(MenuItem::getText)
@@ -196,7 +219,15 @@ public class EventController {
             eventFlowPane.getChildren().add(createEventCard(event));
         }
     }
-
+    @FXML
+    public void handleLogout(){
+        try {
+            MainApplication.showLoginScreen();
+            AuthService.resetUserId();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
     @FXML
     private void homePage(ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("eventmanagementhome.fxml"));
