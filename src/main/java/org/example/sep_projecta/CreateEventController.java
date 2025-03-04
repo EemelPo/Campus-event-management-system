@@ -3,6 +3,7 @@ package org.example.sep_projecta;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -20,6 +21,10 @@ public class CreateEventController {
     @FXML
     TextField eventLocationField;
     @FXML
+    TextField eventMaxAttField;
+    @FXML
+    TextField eventAttQuantField;
+    @FXML
     TextField eventDescriptionField;
     @FXML
     Button saveEventButton;
@@ -29,11 +34,17 @@ public class CreateEventController {
 
     @FXML
     void initialize(){
-        saveEventButton.setOnAction(event -> saveEvent());
+        saveEventButton.setOnAction(event -> {
+            try {
+                saveEvent();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
     }
 
-    private void saveEvent(){
+    private void saveEvent() throws SQLException {
         String eventName = eventNameField.getText();
         String startFieldText = (eventStartField.getText());
         String endFieldText = (eventEndField.getText());
@@ -41,9 +52,12 @@ public class CreateEventController {
         String eventLocation = eventLocationField.getText();
         String eventDescription = eventDescriptionField.getText();
         LocalDate eventDate = eventDatePicker.getValue();
-        int eventId = 0;
+
+        int eventMax = Integer.parseInt(eventMaxAttField.getText());
+        int eventAtt = Integer.parseInt(eventAttQuantField.getText());
+
         if (eventName.isEmpty() || startFieldText.isEmpty() || endFieldText.isEmpty() ||
-                eventCategory.isEmpty() || eventLocation.isEmpty() || eventDescription.isEmpty() ||
+                eventCategory.isEmpty() || eventLocation.isEmpty() || eventDescription.isEmpty() || eventMax == 0|| eventAtt == 0||
                 eventDate == null) {
             Alert errorMessageAlert = new Alert(Alert.AlertType.ERROR);
             errorMessageAlert.setContentText("Please fill all fields!");
@@ -57,7 +71,11 @@ public class CreateEventController {
         LocalTime eventEndTime = LocalTime.parse(endFieldText);
 
 
-        event = new EventModel(eventId, eventName, eventStartTime, eventEndTime, eventCategory, eventLocation, eventDescription, eventDate);
+
+        event = new EventModel(eventName, eventStartTime, eventEndTime, eventCategory, eventLocation, eventDescription, eventDate, eventMax, eventAtt);
+
+        DatabaseConnector.HandleSaveEvent(event);
+
 
         eventNameField.clear();
         eventStartField.clear();
@@ -65,6 +83,8 @@ public class CreateEventController {
         eventCategoryField.clear();
         eventLocationField.clear();
         eventDescriptionField.clear();
+        eventMaxAttField.clear();
+        eventAttQuantField.clear();
         eventDatePicker.setValue(null);
 
     }

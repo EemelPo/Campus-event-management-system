@@ -16,8 +16,10 @@ public class DatabaseConnector {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
-    public static void saveEvent(EventModel event) throws SQLException {
-        String query = "INSERT INTO Event (name, startTime, endTime, category, location, description, date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+    public static void HandleSaveEvent(EventModel event) throws SQLException {
+        String query = "INSERT INTO events (name, startTime, endTime, category, location, description, date, maxAtt, AttQuant) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -29,8 +31,12 @@ public class DatabaseConnector {
             statement.setString(5, event.getEventLocation());
             statement.setString(6, event.getEventDescription());
             statement.setDate(7, java.sql.Date.valueOf(event.getEventDate()));
+            statement.setInt(8,event.getEventMaxAtt());
+            statement.setInt(9,event.getEventAttQuant());
 
             statement.executeUpdate();
+        } catch (SQLException e){
+            e.printStackTrace();
         }
     }
 

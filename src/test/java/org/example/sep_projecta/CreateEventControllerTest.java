@@ -23,6 +23,8 @@ class CreateEventControllerTest extends ApplicationTest {
         controller.eventEndField = new TextField();
         controller.eventCategoryField = new TextField();
         controller.eventLocationField = new TextField();
+        controller.eventMaxAttField = new TextField();
+        controller.eventAttQuantField = new TextField();
         controller.eventDescriptionField = new TextField();
         controller.saveEventButton = new Button();
         controller.initialize();
@@ -37,6 +39,8 @@ class CreateEventControllerTest extends ApplicationTest {
             controller.eventCategoryField.setText("");
             controller.eventLocationField.setText("");
             controller.eventDescriptionField.setText("");
+            controller.eventMaxAttField.setText("");
+            controller.eventAttQuantField.setText("");
             controller.eventDatePicker.setValue(null);
 
             controller.saveEventButton.fire();
@@ -53,6 +57,7 @@ class CreateEventControllerTest extends ApplicationTest {
             controller.eventEndField.setText("12:00");
             controller.eventCategoryField.setText("Category");
             controller.eventLocationField.setText("Location");
+            controller.eventMaxAttField.setText("91");
             controller.eventDescriptionField.setText("Description");
             controller.eventDatePicker.setValue(LocalDate.now());
 
