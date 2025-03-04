@@ -11,9 +11,11 @@ public class EventModel {
     public String eventCategory;
     public String eventDescription;
     public LocalDate eventDate;
+    public int eventMaxAtt;
+    public int eventAttQuant;
 
 
-    public EventModel(String eventName, LocalTime eventStartTime, LocalTime eventEndTime, String eventCategory, String eventLocation, String eventDescription, LocalDate eventDate){
+    public EventModel(String eventName, LocalTime eventStartTime, LocalTime eventEndTime, String eventCategory, String eventLocation, String eventDescription, LocalDate eventDate, int eventMaxAtt, int eventAttQuant){
         this.eventName = eventName;
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
@@ -21,6 +23,8 @@ public class EventModel {
         this.eventLocation = eventLocation;
         this.eventDescription = eventDescription;
         this.eventDate = eventDate;
+        this.eventMaxAtt = eventMaxAtt;
+        this.eventAttQuant = eventAttQuant;
     }
 
     public String getEventName(){
@@ -78,4 +82,12 @@ public class EventModel {
     public void setEventDate(LocalDate eventDate) {
         this.eventDate = eventDate;
     }
+
+    public int getEventMaxAtt(){return eventMaxAtt; }
+
+    public void setEventMaxAtt(int eventMaxAtt) {this.eventMaxAtt = eventMaxAtt;}
+
+    public int getEventAttQuant(){return eventAttQuant; }
+
+    public void setEventAttQuant(int eventAttQuant) {this.eventAttQuant = eventAttQuant; }
 }
