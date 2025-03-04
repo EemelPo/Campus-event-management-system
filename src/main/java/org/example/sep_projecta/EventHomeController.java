@@ -12,6 +12,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 
 public class EventHomeController {
@@ -22,6 +24,9 @@ public class EventHomeController {
 
     @FXML
     private Text myEventsCountLabel;
+
+    @FXML
+    public CardPane MyEventsCardPane;
 
 
     @FXML
@@ -48,6 +53,50 @@ public class EventHomeController {
         int y = Integer.parseInt(x);
         int newCount = y - 1;
         myEventsCountLabel.setText(Integer.toString(newCount));
+    }
+
+    @FXML
+    public void initialize() {
+        try {
+            List<EventModel> myEvents = DatabaseConnector.getMyEvents(2);
+            for (EventModel event : myEvents) {
+                VBox eventBox = new VBox();
+                eventBox.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-radius: 5; -fx-background-radius: 5;");
+
+                Text eventName = new Text(event.getEventName());
+                Text eventType = new Text("Type: " + event.getEventCategory());
+                Text eventLocation = new Text("Location: " + event.getEventLocation());
+                Text eventDate = new Text("Date: " + event.getEventDate().toString());
+                Text eventTime = new Text("Time: " + event.getEventStartTime().toString() + "-" + event.getEventEndTime().toString());
+
+                eventBox.getChildren().addAll(eventName, eventType, eventLocation, eventDate, eventTime);
+                MyEventsCardPane.getItems().add(eventBox);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            List<EventModel> createdEvents = DatabaseConnector.getCreatedEvents(2);
+            for (EventModel event : createdEvents) {
+                VBox eventBox = new VBox();
+                eventBox.setStyle("-fx-background-color: #f0f0f0; -fx-padding: 10; -fx-border-radius: 5; -fx-background-radius: 5;");
+
+                Text eventName = new Text(event.getEventName());
+                Text eventType = new Text("Type: " + event.getEventCategory());
+                Text eventLocation = new Text("Location: " + event.getEventLocation());
+                Text eventDate = new Text("Date: " + event.getEventDate().toString());
+                Text eventTime = new Text("Time: " + event.getEventStartTime().toString() + "-" + event.getEventEndTime().toString());
+
+                Button deleteButton = new Button("Delete");
+                deleteButton.setOnMouseClicked(this::deleteEvent);
+
+                eventBox.getChildren().addAll(eventName, eventType, eventLocation, eventDate, eventTime, deleteButton);
+                CreatedEventsCardPane.getItems().add(eventBox);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML

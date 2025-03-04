@@ -44,9 +44,9 @@ public class EventController {
     public EventController() {
         eventList = new ArrayList<>();
         // Add some sample events
-        eventList.add(new EventModel("AI future", LocalTime.of(10, 0), LocalTime.of(12, 0), "Category 1", "Location 1", "Exploring the future of artificial intelligence", LocalDate.now()));
-        eventList.add(new EventModel("OOP is cool", LocalTime.of(14, 0), LocalTime.of(16, 0), "Category 2", "Location 2", "Understanding the principles of Object-Oriented Programming", LocalDate.now().plusDays(1)));
-        eventList.add(new EventModel("Matrix math optimizations", LocalTime.of(16, 0), LocalTime.of(18, 0), "Category 1", "Location 2", "Optimizing matrix operations for better performance", LocalDate.now().plusDays(30)));
+        eventList.add(new EventModel(1, "AI future", LocalTime.of(10, 0), LocalTime.of(12, 0), "Category 1", "Location 1", "Exploring the future of artificial intelligence", LocalDate.now()));
+        eventList.add(new EventModel(2, "OOP is cool", LocalTime.of(14, 0), LocalTime.of(16, 0), "Category 2", "Location 2", "Understanding the principles of Object-Oriented Programming", LocalDate.now().plusDays(1)));
+        eventList.add(new EventModel(3, "Matrix math optimizations", LocalTime.of(16, 0), LocalTime.of(18, 0), "Category 1", "Location 2", "Optimizing matrix operations for better performance", LocalDate.now().plusDays(30)));
 
         // Initialize the ObservableLists for menu items
         categoryMenuItems = FXCollections.observableArrayList();
