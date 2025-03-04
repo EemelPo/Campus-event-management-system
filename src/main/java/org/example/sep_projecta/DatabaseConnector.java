@@ -7,15 +7,17 @@ import java.util.List;
 public class DatabaseConnector {
 
     private static final String URL = "jdbc:mysql://localhost:3306/eventmanagement";
+
     private static final String USER = "root";
     private static final String PASSWORD = "aitog";
+
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
     }
 
     public static void saveEvent(EventModel event) throws SQLException {
-        String query = "INSERT INTO events (name, startTime, endTime, category, location, description, date) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Event (name, startTime, endTime, category, location, description, date) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -31,6 +33,45 @@ public class DatabaseConnector {
             statement.executeUpdate();
         }
     }
+
+
+    public static List<EventModel> getAllEvents() throws SQLException {
+        String query = "SELECT * FROM Event";
+        List<EventModel> events = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                EventModel event = new EventModel(
+                        resultSet.getString("name"),
+                        resultSet.getTime("startTime").toLocalTime(),
+                        resultSet.getTime("endTime").toLocalTime(),
+                        resultSet.getString("category"),
+                        resultSet.getString("location"),
+                        resultSet.getString("description"),
+                        resultSet.getDate("date").toLocalDate()
+                );
+                events.add(event);
+            }
+        }
+        return events;
+    }
+
+    public static List<String> getDistinctValues(String column) throws SQLException {
+        String query = "SELECT DISTINCT " + column + " FROM Event";
+        List<String> values = new ArrayList<>();
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(query);
+             ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                values.add(resultSet.getString(column));
+            }
+        }
+        return values;
 
     public static List<EventModel> getMyEvents(int userId) throws SQLException {
         String query = "SELECT e.* FROM event e JOIN attendance a ON e.eventid = a.eventid WHERE a.userid = ?";
@@ -86,6 +127,7 @@ public class DatabaseConnector {
         }
 
         return events;
+
     }
 }
 
