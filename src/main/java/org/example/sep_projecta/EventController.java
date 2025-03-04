@@ -42,12 +42,14 @@ public class EventController {
     private Stage stage;
 
     public EventController() {
+
         try {
             eventList = DatabaseConnector.getAllEvents();
         } catch (SQLException e) {
             e.printStackTrace();
             eventList = FXCollections.observableArrayList();
         }
+
         // Initialize the ObservableLists for menu items
         categoryMenuItems = FXCollections.observableArrayList();
         locationMenuItems = FXCollections.observableArrayList();

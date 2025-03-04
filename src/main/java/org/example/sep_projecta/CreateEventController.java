@@ -41,6 +41,7 @@ public class CreateEventController {
         String eventLocation = eventLocationField.getText();
         String eventDescription = eventDescriptionField.getText();
         LocalDate eventDate = eventDatePicker.getValue();
+        int eventId = 0;
         if (eventName.isEmpty() || startFieldText.isEmpty() || endFieldText.isEmpty() ||
                 eventCategory.isEmpty() || eventLocation.isEmpty() || eventDescription.isEmpty() ||
                 eventDate == null) {
@@ -56,7 +57,7 @@ public class CreateEventController {
         LocalTime eventEndTime = LocalTime.parse(endFieldText);
 
 
-        event = new EventModel(eventName, eventStartTime, eventEndTime, eventCategory, eventLocation, eventDescription, eventDate);
+        event = new EventModel(eventId, eventName, eventStartTime, eventEndTime, eventCategory, eventLocation, eventDescription, eventDate);
 
         eventNameField.clear();
         eventStartField.clear();
