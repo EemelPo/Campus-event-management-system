@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class MainApplication extends Application {
     @Override
@@ -16,9 +17,9 @@ public class MainApplication extends Application {
             FXMLLoader fxmlLoader3 = new FXMLLoader(MainApplication.class.getResource("CreateEvent.fxml"));
             FXMLLoader fxmlLoader4 = new FXMLLoader(MainApplication.class.getResource("eventmanagementbrowsetest.fxml"));
             Scene scene1 = new Scene(fxmlLoader.load());
-            Scene scene2 = new Scene(fxmlLoader2.load());
-            Scene scene3 = new Scene(fxmlLoader3.load());
-            Scene scene4 = new Scene(fxmlLoader4.load());
+            //Scene scene2 = new Scene(fxmlLoader2.load());
+            //Scene scene3 = new Scene(fxmlLoader3.load());
+            //Scene scene4 = new Scene(fxmlLoader4.load());
             stage.setScene(scene1);
             stage.setTitle("Event Management Home");
             stage.show();
@@ -27,7 +28,8 @@ public class MainApplication extends Application {
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+        DatabaseConnector.getConnection();
         launch();
     }
 }

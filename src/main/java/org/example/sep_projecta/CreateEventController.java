@@ -52,8 +52,10 @@ public class CreateEventController {
         String eventLocation = eventLocationField.getText();
         String eventDescription = eventDescriptionField.getText();
         LocalDate eventDate = eventDatePicker.getValue();
+
         int eventMax = Integer.parseInt(eventMaxAttField.getText());
         int eventAtt = Integer.parseInt(eventAttQuantField.getText());
+
         if (eventName.isEmpty() || startFieldText.isEmpty() || endFieldText.isEmpty() ||
                 eventCategory.isEmpty() || eventLocation.isEmpty() || eventDescription.isEmpty() || eventMax == 0|| eventAtt == 0||
                 eventDate == null) {
@@ -69,9 +71,11 @@ public class CreateEventController {
         LocalTime eventEndTime = LocalTime.parse(endFieldText);
 
 
+
         event = new EventModel(eventName, eventStartTime, eventEndTime, eventCategory, eventLocation, eventDescription, eventDate, eventMax, eventAtt);
 
         DatabaseConnector.HandleSaveEvent(event);
+
 
         eventNameField.clear();
         eventStartField.clear();

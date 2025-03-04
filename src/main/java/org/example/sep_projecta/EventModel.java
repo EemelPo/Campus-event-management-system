@@ -11,11 +11,13 @@ public class EventModel {
     public String eventCategory;
     public String eventDescription;
     public LocalDate eventDate;
+
     public int eventMaxAtt;
     public int eventAttQuant;
 
 
     public EventModel(String eventName, LocalTime eventStartTime, LocalTime eventEndTime, String eventCategory, String eventLocation, String eventDescription, LocalDate eventDate, int eventMaxAtt, int eventAttQuant){
+
         this.eventName = eventName;
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;

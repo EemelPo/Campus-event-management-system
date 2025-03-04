@@ -13,11 +13,11 @@ import javafx.scene.text.Text;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import javafx.beans.binding.Bindings;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,11 +42,13 @@ public class EventController {
     private Stage stage;
 
     public EventController() {
-        eventList = new ArrayList<>();
-        // Add some sample events
-        eventList.add(new EventModel("AI future", LocalTime.of(10, 0), LocalTime.of(12, 0), "Category 1", "Location 1", "Exploring the future of artificial intelligence", LocalDate.now()));
-        eventList.add(new EventModel("OOP is cool", LocalTime.of(14, 0), LocalTime.of(16, 0), "Category 2", "Location 2", "Understanding the principles of Object-Oriented Programming", LocalDate.now().plusDays(1)));
-        eventList.add(new EventModel("Matrix math optimizations", LocalTime.of(16, 0), LocalTime.of(18, 0), "Category 1", "Location 2", "Optimizing matrix operations for better performance", LocalDate.now().plusDays(30)));
+
+        try {
+            eventList = DatabaseConnector.getAllEvents();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            eventList = FXCollections.observableArrayList();
+        }
 
         // Initialize the ObservableLists for menu items
         categoryMenuItems = FXCollections.observableArrayList();
@@ -62,6 +64,20 @@ public class EventController {
             eventFlowPane.prefWrapLengthProperty().set(newValue.getWidth());
         });
 
+        // Populate category and location menus from the database
+        populateMenuItems(categoryMenuItems, "category");
+        populateMenuItems(locationMenuItems, "location");
+
+
+        // Bind the Menu items to the ObservableLists
+        Bindings.bindContent(categoryMenu.getItems(), categoryMenuItems);
+        Bindings.bindContent(locationMenu.getItems(), locationMenuItems);
+
+        // Bind the prefWrapLength of the FlowPane to the viewport width of the ScrollPane
+        scrollPane.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
+            eventFlowPane.prefWrapLengthProperty().set(newValue.getWidth());
+        });
+
         // Add a listener to update the Menu items when the ObservableList changes
         categoryMenuItems.addListener((javafx.collections.ListChangeListener<MenuItem>) change -> {
             categoryMenu.getItems().setAll(categoryMenuItems);
@@ -69,12 +85,6 @@ public class EventController {
         locationMenuItems.addListener((javafx.collections.ListChangeListener<MenuItem>) change -> {
             locationMenu.getItems().setAll(locationMenuItems);
         });
-
-        // Add sample items to the ObservableLists
-        categoryMenuItems.add(new CheckMenuItem("Category 1"));
-        categoryMenuItems.add(new CheckMenuItem("Category 2"));
-        locationMenuItems.add(new CheckMenuItem("Location 1"));
-        locationMenuItems.add(new CheckMenuItem("Location 2"));
 
         // Add event cards to the FlowPane
         for (EventModel event : eventList) {
@@ -111,6 +121,17 @@ public class EventController {
 
     }
 
+    private void populateMenuItems(ObservableList<MenuItem> menuItems, String column) {
+        try {
+            List<String> values = DatabaseConnector.getDistinctValues(column);
+            for (String value : values) {
+                menuItems.add(new CheckMenuItem(value));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private StackPane createEventCard(EventModel event) {
         StackPane stackPane = new StackPane();
         stackPane.setStyle("-fx-background-color: lightgray; -fx-padding: 10; -fx-border-radius: 10; -fx-background-radius: 10;");
@@ -137,6 +158,8 @@ public class EventController {
 
         vBox.getChildren().addAll(nameText, categoryText, locationText, dateText, timeBox);
         stackPane.getChildren().add(vBox);
+
+        System.out.print("Created card for event: " + event.getEventName());
 
         return stackPane;
     }
