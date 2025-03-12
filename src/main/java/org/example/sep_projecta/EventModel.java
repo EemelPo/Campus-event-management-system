@@ -4,20 +4,24 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public class EventModel {
-    public String eventName;
-    public LocalTime eventStartTime;
-    public LocalTime eventEndTime;
-    public String eventLocation;
-    public String eventCategory;
-    public String eventDescription;
-    public LocalDate eventDate;
-    public int eventMaxAtt;
-    public int eventAttQuant;
-    public int creatorid;
+    // Added id field to store the auto-generated id from the database.
+    private int id;
 
+    private String eventName;
+    private LocalTime eventStartTime;
+    private LocalTime eventEndTime;
+    private String eventLocation;
+    private String eventCategory;
+    private String eventDescription;
+    private LocalDate eventDate;
+    private int eventMaxAtt;
+    private int eventAttQuant;
+    private int creatorid;
 
-    public EventModel(String eventName, LocalTime eventStartTime, LocalTime eventEndTime, String eventCategory, String eventLocation, String eventDescription, LocalDate eventDate, int eventMaxAtt, int eventAttQuant, int creatorid){
-
+    // Constructor without id for creating new events.
+    public EventModel(String eventName, LocalTime eventStartTime, LocalTime eventEndTime,
+                      String eventCategory, String eventLocation, String eventDescription,
+                      LocalDate eventDate, int eventMaxAtt, int eventAttQuant, int creatorid) {
         this.eventName = eventName;
         this.eventStartTime = eventStartTime;
         this.eventEndTime = eventEndTime;
@@ -28,6 +32,32 @@ public class EventModel {
         this.eventMaxAtt = eventMaxAtt;
         this.eventAttQuant = eventAttQuant;
         this.creatorid = creatorid;
+    }
+
+    // Constructor with id for loading events from the database.
+    public EventModel(int id, String eventName, LocalTime eventStartTime, LocalTime eventEndTime,
+                      String eventCategory, String eventLocation, String eventDescription,
+                      LocalDate eventDate, int eventMaxAtt, int eventAttQuant, int creatorid) {
+        this.id = id;
+        this.eventName = eventName;
+        this.eventStartTime = eventStartTime;
+        this.eventEndTime = eventEndTime;
+        this.eventCategory = eventCategory;
+        this.eventLocation = eventLocation;
+        this.eventDescription = eventDescription;
+        this.eventDate = eventDate;
+        this.eventMaxAtt = eventMaxAtt;
+        this.eventAttQuant = eventAttQuant;
+        this.creatorid = creatorid;
+    }
+
+    // Getter and setter for id.
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getEventName(){
@@ -43,7 +73,7 @@ public class EventModel {
     }
 
     public void setEventStartTime(LocalTime eventStartTime) {
-        this.eventStartTime = (eventStartTime);
+        this.eventStartTime = eventStartTime;
     }
 
     public LocalTime getEventEndTime() {
@@ -51,7 +81,7 @@ public class EventModel {
     }
 
     public void setEventEndTime(LocalTime eventEndTime) {
-        this.eventEndTime = (eventEndTime);
+        this.eventEndTime = eventEndTime;
     }
 
     public String getEventCategory() {
@@ -86,15 +116,27 @@ public class EventModel {
         this.eventDate = eventDate;
     }
 
-    public int getEventMaxAtt(){return eventMaxAtt; }
+    public int getEventMaxAtt(){
+        return eventMaxAtt;
+    }
 
-    public void setEventMaxAtt(int eventMaxAtt) {this.eventMaxAtt = eventMaxAtt;}
+    public void setEventMaxAtt(int eventMaxAtt) {
+        this.eventMaxAtt = eventMaxAtt;
+    }
 
-    public int getEventAttQuant(){return eventAttQuant; }
+    public int getEventAttQuant(){
+        return eventAttQuant;
+    }
 
-    public void setEventAttQuant(int eventAttQuant) {this.eventAttQuant = eventAttQuant; }
+    public void setEventAttQuant(int eventAttQuant) {
+        this.eventAttQuant = eventAttQuant;
+    }
 
-    public int getCreatorid(){return creatorid; }
+    public int getCreatorid(){
+        return creatorid;
+    }
 
-    public void setCreatorid(int creatorid) {this.creatorid = creatorid; }
+    public void setCreatorid(int creatorid) {
+        this.creatorid = creatorid;
+    }
 }

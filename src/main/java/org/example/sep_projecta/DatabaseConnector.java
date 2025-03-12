@@ -42,16 +42,19 @@ public class DatabaseConnector {
     }
 
 
-    public static List<EventModel> getAllEvents() throws SQLException {
-        String query = "SELECT * FROM Event";
+    public static List<EventModel> getAllEvents(int userId) throws SQLException {
+        String query = "SELECT * FROM Event e WHERE e.EventId NOT IN (SELECT a.eventid FROM attendance a WHERE a.userid = ?)";
         List<EventModel> events = new ArrayList<>();
 
         try (Connection connection = getConnection();
-             PreparedStatement statement = connection.prepareStatement(query);
-             ResultSet resultSet = statement.executeQuery()) {
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, userId);
+            ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
                 EventModel event = new EventModel(
+                        resultSet.getInt("EventId"),
                         resultSet.getString("name"),
                         resultSet.getTime("startTime").toLocalTime(),
                         resultSet.getTime("endTime").toLocalTime(),
@@ -148,6 +151,19 @@ public class DatabaseConnector {
 
     public static void handleAttendEvent(int userId, int eventId) throws SQLException {
         String query = "INSERT INTO attendance (userid, eventid) VALUES (?, ?)";
+
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setInt(1, userId);
+            statement.setInt(2, eventId);
+
+            statement.executeUpdate();
+        }
+    }
+
+    public static void handleCancelAttendEvent(int userId, int eventId) throws SQLException {
+        String query = "DELETE FROM attendance WHERE userid = ? AND eventid = ?";
 
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {

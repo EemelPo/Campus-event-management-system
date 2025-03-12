@@ -56,6 +56,33 @@ public class CreateEventController {
         }
     }
     @FXML
+    private void handleSettings(){
+        MainApplication.showSettings();
+    }
+
+    @FXML
+    private void handleBackToHome(){
+        try {
+            MainApplication.showHomePage();
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void clearAllFields(){
+        eventNameField.clear();
+        eventStartField.clear();
+        eventEndField.clear();
+        eventCategoryField.clear();
+        eventLocationField.clear();
+        eventDescriptionField.clear();
+        eventMaxAttField.clear();
+        eventAttQuantField.clear();
+        eventDatePicker.setValue(null);
+    }
+
+    @FXML
     void saveEvent() throws SQLException {
         String eventName = eventNameField.getText();
         String startFieldText = (eventStartField.getText());
@@ -92,16 +119,7 @@ public class CreateEventController {
         DatabaseConnector.HandleSaveEvent(event);
 
 
-        eventNameField.clear();
-        eventStartField.clear();
-        eventEndField.clear();
-        eventCategoryField.clear();
-        eventLocationField.clear();
-        eventDescriptionField.clear();
-        eventMaxAttField.clear();
-        eventAttQuantField.clear();
-        eventDatePicker.setValue(null);
-
+        clearAllFields();
     }
 
 

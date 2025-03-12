@@ -37,6 +37,7 @@ public class RegistrationController {
 
         if (AuthService.register(firstName, lastName, email, phoneNumber, isTeacher, username, password)) {
             showAlert(Alert.AlertType.INFORMATION, "Registration Successful", "User registered successfully!");
+            handleBackToLogin();
         } else {
             showAlert(Alert.AlertType.ERROR, "Registration Failed", "Could not register user.");
         }

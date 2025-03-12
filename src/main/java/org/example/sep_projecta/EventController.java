@@ -42,11 +42,12 @@ public class EventController {
     private ObservableList<MenuItem> categoryMenuItems;
     private ObservableList<MenuItem> locationMenuItems;
     private Stage stage;
+    private AuthService authService = new AuthService();
 
     public EventController() {
 
         try {
-            eventList = DatabaseConnector.getAllEvents();
+            eventList = DatabaseConnector.getAllEvents(authService.getCurrentUserId());
         } catch (SQLException e) {
             e.printStackTrace();
             eventList = FXCollections.observableArrayList();
@@ -123,13 +124,32 @@ public class EventController {
 
     }
 
+
     @FXML
     private void attendEvent(MouseEvent event) {
         Button attendButton = (Button) event.getSource();
-        try {
-            DatabaseConnector.handleAttendEvent(AuthService.getCurrentUserId(), Integer.parseInt((attendButton.getId())));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        // Retrieve the event ID from the button's id property.
+        int eventId = Integer.parseInt(attendButton.getId());
+        int currentUserId = AuthService.getCurrentUserId();
+
+        if (attendButton.getText().equals("Attend")) {
+            try {
+                // Call the database method to mark the event as attended.
+                DatabaseConnector.handleAttendEvent(currentUserId, eventId);
+                // Toggle the button text to "Cancel".
+                attendButton.setText("Cancel");
+            } catch (SQLException e) {
+                throw new RuntimeException("Error attending event", e);
+            }
+        } else if (attendButton.getText().equals("Cancel")) {
+            try {
+                // Call the database method to cancel the attendance.
+                DatabaseConnector.handleCancelAttendEvent(currentUserId, eventId);
+                // Toggle the button text back to "Attend".
+                attendButton.setText("Attend");
+            } catch (SQLException e) {
+                throw new RuntimeException("Error canceling attendance", e);
+            }
         }
     }
 
@@ -144,6 +164,7 @@ public class EventController {
         }
     }
 
+
     private StackPane createEventCard(EventModel event) {
         StackPane stackPane = new StackPane();
         stackPane.setStyle("-fx-background-color: lightgray; -fx-padding: 10; -fx-border-radius: 10; -fx-background-radius: 10;");
@@ -157,11 +178,12 @@ public class EventController {
         Text locationText = new Text("Location: " + event.getEventLocation());
         Text dateText = new Text("Date: " + event.getEventDate().toString());
 
+        // Create a text flow for the description to enable wrapping.
         Text descriptionText = new Text("Description: " + event.getEventDescription());
-        descriptionText.setWrappingWidth(130); // Set wrapping width for description
+        descriptionText.setWrappingWidth(130);
+        TextFlow descriptionTextFlow = new TextFlow(descriptionText);
 
-        TextFlow descriptionTextFlow = new TextFlow(descriptionText); // Use TextFlow for wrapping
-
+        // Create a styled box for the event time.
         HBox timeBox = new HBox(5);
         timeBox.setStyle("-fx-alignment: center;");
 
@@ -169,20 +191,19 @@ public class EventController {
         timePane.setStyle("-fx-background-color: darkgray; -fx-padding: 5; -fx-border-radius: 10; -fx-background-radius: 10;");
         Text timeText = new Text(event.getEventStartTime().toString() + " - " + event.getEventEndTime().toString());
         timeText.setStyle("-fx-fill: white;");
-
         timePane.getChildren().add(timeText);
         timeBox.getChildren().add(timePane);
 
+        // Create the attend/cancel button and bind the attend event handler.
         Button attendButton = new Button("Attend");
+        // Set the button's id to the event id so it can be used in the attend handler.
+        attendButton.setId(String.valueOf(event.getId()));
         attendButton.setOnMouseClicked(this::attendEvent);
 
-        vBox.getChildren().addAll(nameText, categoryText, locationText, dateText, descriptionTextFlow, timeBox);
-        vBox.getChildren().add(attendButton);
-
+        vBox.getChildren().addAll(nameText, categoryText, locationText, dateText, descriptionTextFlow, timeBox, attendButton);
         stackPane.getChildren().add(vBox);
 
         System.out.println("Created card for event: " + event.getEventName());
-
         return stackPane;
     }
 
@@ -227,6 +248,10 @@ public class EventController {
         } catch (IOException e){
             e.printStackTrace();
         }
+    }
+    @FXML
+    private void handleSettings(){
+        MainApplication.showSettings();
     }
     @FXML
     private void homePage(ActionEvent event) throws IOException {
